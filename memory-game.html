@@ -15,6 +15,20 @@
             --success-color: #4caf50;
         }
 
+        body.dark-theme {
+            --background-color: #1e1e1e;
+            --card-back: #424242;
+            --card-front: #2d2d2d;
+            --text-color: #e0e0e0;
+        }
+
+        body.dark-theme .controls,
+        body.dark-theme .modal-content,
+        body.dark-theme .scores-list {
+            background: #2d2d2d;
+            color: var(--text-color);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -93,6 +107,25 @@
 
         button.active {
             background-color: #0d47a1;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            padding: 0;
+            z-index: 1000;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.dark-theme .theme-toggle {
+            background: #555;
         }
 
         /* Game grid styles with responsive layout */
@@ -209,10 +242,19 @@
             .card-face {
                 font-size: 1.5rem;
             }
+
+            .theme-toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+                top: 10px;
+                right: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <button class="theme-toggle" title="Toggle Dark Theme">🌙</button>
     <div class="container">
         <!-- Game header with title and instructions -->
         <header class="header">
@@ -263,6 +305,23 @@
     </div>
 
     <script>
+        // Theme Management
+        const themeToggle = document.querySelector('.theme-toggle');
+        
+        // Load saved theme preference
+        const savedTheme = localStorage.getItem('memoryGameTheme') || 'light';
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            themeToggle.textContent = '☀️';
+        }
+        
+        // Theme toggle event listener
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.body.classList.toggle('dark-theme');
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+            localStorage.setItem('memoryGameTheme', isDark ? 'dark' : 'light');
+        });
+
         // Game state management
         const gameState = {
             moves: 0,
